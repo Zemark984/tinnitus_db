@@ -41,6 +41,8 @@ def fetch_pubmed_ids(query, retmax):
         f"&retmax={retmax}&retmode=json"
         f"&tool=TinnitusDB&email={args.email}"
     )
+    if args.api_key:
+        url += f"&api_key={args.api_key}"
     headers = {'User-Agent': f'TinnitusDB/1.0 ({args.email})'}
 
     try:
@@ -72,6 +74,8 @@ def fetch_pubmed_meta(ids):
             f"?db=pubmed&id={','.join(group)}&retmode=xml"
             f"&tool=TinnitusDB&email={args.email}"
         )
+        if args.api_key:
+            url += f"&api_key={args.api_key}"
 
         try:
             r = requests.get(url, headers=headers, timeout=25)

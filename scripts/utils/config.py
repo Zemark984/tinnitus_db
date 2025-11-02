@@ -1,16 +1,20 @@
 import argparse
+import os
+from dotenv import load_dotenv
 
 # Конфигурация
 parser = argparse.ArgumentParser(description="ETL PubMed for tinnitus/hearing loss knowledge base")
 parser.add_argument('--query', default='(tinnitus[Title/Abstract] AND ("hearing loss"[Title/Abstract] OR deafness OR "тугоухость")) AND (humans[MeSH]) NOT (animals[MeSH])', help='PubMed query')
 parser.add_argument('--retmax', type=int, default=50, help='max articles')
 parser.add_argument('--email', required=True, help='NCBI API email')
+parser.add_argument('--api_key', default='', help='NCBI API key (optional, loads from scripts/secrets.env if not provided)')
 parser.add_argument('--atom', default='', help='Atom/RSS feed for update (optional)')
 parser.add_argument('--out', default='data/tinnitus_db.jsonl', help='Output JSONL path')
 parser.add_argument('--log', default='logs/db_update.log', help='Log file path')
 parser.add_argument('--ncbi_max_retries', type=int, default=5, help='Max retries for NCBI API')
 parser.add_argument('--ncbi_retry_delay', type=int, default=60, help='Base delay for NCBI retries (seconds)')
-args = parser.parse_args()
+args = None # Will be set by run.py
+
 
 SCHEMA_VERSION = "1.0.1"
 
