@@ -1,4 +1,5 @@
 import os
+import time
 from .utils.config import args, SCHEMA_VERSION
 from .utils.logging import log, error
 from .api.ncbi import fetch_pubmed_ids, fetch_pubmed_meta
@@ -7,6 +8,7 @@ from .storage.jsonl import load_existing, atomic_save
 
 def main():
     """Основная функция"""
+    start_time = time.time()
     try:
         log(f"Starting database update with query: {args.query}")
         os.makedirs(os.path.dirname(args.out), exist_ok=True)
@@ -44,6 +46,7 @@ def main():
     except Exception as e:
         error(f"Critical error during database update: {str(e)}")
         raise
-
-if __name__ == "__main__":
-    main()
+    finally:
+        end_time = time.time()
+        duration = end_time - start_time
+        log(f"Total execution time: {duration:.2f} seconds.")
